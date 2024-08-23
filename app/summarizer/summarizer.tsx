@@ -23,8 +23,6 @@ function HomePage() {
       // Start loading state
       setIsLoading(true);
 
-      console.log('Submitting data:', data);
-
       const res = await axios.post('http://127.0.0.1:8000/summarize', {
         request: data
       }) 
@@ -55,7 +53,7 @@ function HomePage() {
     })
       .then(res => res.json())
       .then(data => {
-        setSummText(data.data)
+        setSummText(data?.summData.summary)
         setIsLoading(false)
       })
       .catch(error => {
@@ -67,19 +65,18 @@ function HomePage() {
 
   return (
     <>
-
-
       <div className=' w-full flex-1 flex flex-col gap-10 p-4 font-bold  max-w-6xl mx-auto'>
         <div className='w-full h-full bg-gray-100 rounded shadow p-4'>
           <textarea
-            // disabled={isLoading}
+          rows={10}
+            disabled={isLoading}
             onChange={(e) => setRawText(e.target.value)} placeholder='Your Text Here..' className=' w-full h-full border rounded focus:outline-none p-3 bg-gray-50' />
           <input type='file' onChange={(e: any) => {
             submitFileData(e.target.files[0])
           }} />
           <div className='flex justify-end'>
             <button
-              // disabled={isLoading}
+              disabled={isLoading}
               onClick={() => submitData(rawText)} className={`w-fit bg-blue-600 text-gray-100 rounded h-fit text-sm border px-4 py-3 mt-3`}>{isLoading ? 'Summarizing...' : 'Summarize'}</button>
             {/* <Buttons action={"action"} data={"data"} placeholder={"Summarize"} classname={"w-fit text-sm border px-4 py-3"} /> */}
           </div>

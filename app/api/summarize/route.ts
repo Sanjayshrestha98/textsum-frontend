@@ -36,20 +36,19 @@ const getSummarizedData = async (pythonOutput: string) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                request: pythonOutput, 
+                request: pythonOutput,
             })
-        });  
+        });
 
         // Check if the response is OK
-        if (response.ok) {
+        if (!response.ok) {
             const errorText = await response.text();
-            alert(`Error: ${errorText}`);
             return;
-        } 
+        }
 
         const result = await response.json();
 
-        return await result;
+        return result;
 
     } catch (ERR) {
         console.log(ERR)
@@ -75,10 +74,9 @@ export const POST = async (req: any) => {
         // const summarize = path.join(process.cwd(), 'app/python-scripts/summarize.py');
         const pythonOutput = await runPythonScript(scriptPath, filePath);
         // const summarizedOutput = await runPythonScript(summarize, filePath);
+        console.log('pythonOutput', pythonOutput)
         const summData: any = await getSummarizedData(pythonOutput);
-
-        console.log('here1', summData)
-
+        console.log('summData', summData)
         return NextResponse.json({ message: 'Success', summData }, { status: 201 });
         // return NextResponse.json({ message: 'Success', data: summarizedOutput }, { status: 201 });
     } catch (error: any) {
